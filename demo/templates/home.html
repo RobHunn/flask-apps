@@ -1,0 +1,16 @@
+<!-- Home.html-->
+{% extends 'base.html' %}
+{% block title %} Example Post {% endblock %}
+{% block content %}
+
+<form id="my-form" method="POST" action="{{url_for('posts')}}">
+    <label for="author">Author</label>
+    <input id="author" name="author" type="text" placeholder="Your name" />
+    <label for="title">Title</label>
+    <input id="title" name="title" type="text" placeholder="Post title" />
+    <label for="body">Body</label>
+    <input id="body" name="body" type="textarea" placeholder="Post text..." />
+    <button>Submit</button>
+</form>
+
+{% endblock %}

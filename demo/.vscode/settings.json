@@ -1,0 +1,4 @@
+{
+    "python.pythonPath": "/Users/roberthunnicutt/Dev/sb/my-python/demo/venv/bin/python3",
+    "python.formatting.provider": "black"
+}
