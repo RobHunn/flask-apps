@@ -1,4 +1,4 @@
-#!/Users/roberthunnicutt/Dev/sb/my-python/flask-boggle/venv/bin/python3
+#!/Users/roberthunnicutt/Dev/flask-apps/flask-boggle/venv/bin/python3
 # -*- coding: utf-8 -*-
 import re
 import sys

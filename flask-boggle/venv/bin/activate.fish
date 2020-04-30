@@ -29,7 +29,7 @@ end
 # unset irrelevant variables
 deactivate nondestructive
 
-set -gx VIRTUAL_ENV "/Users/roberthunnicutt/Dev/sb/my-python/flask-boggle/venv"
+set -gx VIRTUAL_ENV "/Users/roberthunnicutt/Dev/flask-apps/flask-boggle/venv"
 
 set -gx _OLD_VIRTUAL_PATH $PATH
 set -gx PATH "$VIRTUAL_ENV/bin" $PATH
