@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
+    <title>Money converter</title>
+</head>
+
+<body>
+    <div style="display: flex; align-items: center; justify-content:center">
+        <div style="width: 22%;" class="item1">
+            <h3 style="letter-spacing: .1em;">Current US Doller Conversion :</h3>
+        </div>
+        <div style="width: 70%;" class="item2">
+            <marquee direction="left" scrollamount="10" behavior="scroll">
+                {% for rate in rates %}
+                <span><b>{{rate}}</b>&nbsp;{{rates[rate]}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                {% endfor %}
+            </marquee>
+        </div>
+    </div>
+    <div style="display: flex; align-items: center; justify-content:center">
+        <div style="width: 22%;">
+            <h3 style="letter-spacing: .2em;">Todays Price of {{bit['symbol']}}itcoin :</h3>
+        </div>
+        <div style="width: 70%;display: flex; align-items: center; justify-content:space-evenly">
+            <div>
+                <p>{{bit['name_usd']}} ${{bit['bitcoin_usd']}}</p>
+            </div>
+            <div>
+                <p> {{bit['name_eur']}} {{bit['symbol_eur']}}{{bit['bitcoin_eur']}}</p>
+            </div>
+            <div>
+                <p>{{bit['name_gbp']}} {{bit['symbol_gbp']}}{{bit['bitcoin_gbp']}}</p>
+            </div>
+        </div>
+    </div>
+    <div style="display: flex; align-items: center; justify-content:space-evenly; flex-direction: row;">
+        <div style="display: flex; align-items: center; justify-content:center; flex-direction: column;">
+            <div class="item-rates-form">
+                <form id="get-rate" action="/current-rate" method="POST">
+                    <label for="rate">Conversion rate for Currency:</label>
+                    <select default="USD" id="rate" name="rate" required>
+                        <option value="">---</option>
+                        {% for rate in rates %}
+                        <option value="{{rate}}">{{rate}}</option>
+                        {% endfor %}
+                    </select>
+                    <button>Submit</button>
+                </form>
+            </div>
+            <div class="item-rates-res">
+                {% block rates %}{% endblock %}
+            </div>
+        </div>
+
+        <div style="display: flex; align-items: center; justify-content:center; flex-direction: column;">
+            <div class="item-convert-form">
+                <form id="convert" action="/convert" method="POST">
+                    <label for="rate-from">Converting from:</label>
+                    <select id="rate-from">
+                        {% for rate in rates %}
+                        <option value="{{rate}}">{{rate}}</option>
+                        {% endfor %}
+                    </select>
+                    <label for="rate-too">Converting too:</label>
+                    <select id="rate-too">
+                        {% for rate in rates %}
+                        <option value="{{rate}}">{{rate}}</option>
+                        {% endfor %}
+                        <button>Submit</button>
+                    </select>
+                    <button>Submit</button>
+                </form>
+            </div>
+            <div class="item-convert-res">
+                {% block convert %}{% endblock %}
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

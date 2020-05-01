@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block rates %}
+<p>{{symbol}} - {{name}} World Conversion rate</p>
+<ul>
+    {% for rate in rates2 %}
+    <li style="list-style: none;"><b>{{rate}}</b> : {{rates2[rate]}}</li>
+    {% endfor %}
+</ul>
+{% endblock %}
