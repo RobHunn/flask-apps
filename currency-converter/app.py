@@ -51,9 +51,27 @@ def current():
     )
 
 
-@app.route("/convert")
+@app.route("/convert", methods=["POST"])
 def convert():
     """Show index.html."""
     c = CurrencyRates()
-    x = c.get_rates("USD")
-    return render_template("index.html", rates=x)
+    amount = request.form.get('amount')
+    rate_from = request.form.get('rate-from')
+    rate_too = request.form.get('rate-too')
+
+    cc = CurrencyCodes()
+    name_from = cc.get_currency_name(rate_from)
+    name_to = cc.get_currency_name(rate_too)
+    symbol = cc.get_symbol(rate_too)
+
+    if not amount:
+        con_rate = "{0:.2f}".format(round(c.get_rate(rate_from, rate_too), 2))
+        return render_template("convert.html", con_rate=con_rate, name_from=name_from, name_to=name_to, symbol=symbol, rates=session.get("rates"), bit=session.get("bit"))
+
+    else:
+        con_rate = "{0:.2f}".format(
+            round(c.convert(rate_from, rate_too, amount), 2))
+        return render_template("convert.html",
+                               con_rate=con_rate, name_from=name_from,
+                               name_to=name_to, symbol=symbol,
+                               rates=session.get("rates"), bit=session.get("bit"))
