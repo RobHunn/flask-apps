@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %} Home {% endblock %}
+
+{% block content %}
+
+<ul>
+    {% if users %}
+    {% for user in users %}
+    <li><a href="{{url_for( 'show_user', id =user.id )}}">{{ user.first_name }}</a></li>
+    {% endfor %}
+    <a class="btn" href="{{url_for('form')}}">Add User</a>
+    {% else %}
+    <h1>No users at this time</h1>
+    <p>Please add a user below</p>
+    <a class="btn" href="{{url_for('form')}}">Add User</a>
+    {% endif %}
+</ul>
+
+{% endblock %}

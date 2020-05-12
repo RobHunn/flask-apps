@@ -1,0 +1,4 @@
+{
+    "python.formatting.provider": "black",
+    "python.pythonPath": "/Users/roberthunnicutt/Dev/flask-apps/flask-blogly/venv/bin/python3"
+}

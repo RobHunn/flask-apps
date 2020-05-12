@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %} Submit User {% endblock %}
+
+{% block content %}
+
+<form action="{{ url_for('user_add') }}" method="POST">
+    <p>First name: <input name="first_name" required></p>
+    <p>Last name: <input name="last_name" required></p>
+    <p>Profile Pic: <input name="img_url"></p>
+    <button>Save</button>
+</form>
+
+{% endblock %}

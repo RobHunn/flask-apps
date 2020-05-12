@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %} Profile {% endblock %}
+
+{% block content %}
+<div class="user-container">
+    <ul>
+        {% if user %}
+        <img id="user{{user.id}}" class="profile-img" src="{{user.image_url}}" alt="Picture of person">
+        <h3>First name: {{user.first_name}}</h3>
+        <h3>Last name: {{user.last_name}}</h3>
+        <a class="btn" href="{{url_for('edit', id = user.id)}}">Edit</a>
+        <a class="btn" href="{{url_for('delete', id = user.id)}}">Delete</a>
+        <a class="btn" href="{{url_for('home') }}">Back</a>
+        {% else %}
+
+        <h1>Sorry no user info at this time...</h1>
+
+        {% endif %}
+    </ul>
+</div>
+
+{% endblock %}
