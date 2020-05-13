@@ -40,7 +40,7 @@ def user_add():
     db.session.add(user)
     db.session.commit()
 
-    return redirect(url_for("home"))
+    return redirect(url_for("show_user", id=user.id))
 
 
 @app.route("/show_user/<int:id>")
@@ -51,17 +51,40 @@ def show_user(id):
     return render_template("user.html", user=user)
 
 
-@app.route("/edit/<int:id>")
+@app.route("/edit/<int:id>", methods=["GET", "POST"])
 def edit(id):
-    """Show info on a single user."""
+    """Show edit form on GET, or edit user then Redirect on POST ."""
 
-    user = User.query.get_or_404(id)
-    return render_template("user.html", user=user)
+    if request.method == "POST":
+        first_name = request.form["first_name"]
+        last_name = request.form["last_name"]
+        image_url = request.form["image_url"]
+        image_url = image_url if image_url else "../static/images/placeholder.jpg"
+
+        user = User.query.filter(User.id == id).update(
+            {
+                User.first_name: first_name,
+                User.last_name: last_name,
+                User.image_url: image_url,
+            }
+        )
+        db.session.commit()
+
+        if user:
+            return redirect(url_for("show_user", id=id))
+        else:
+            return "error"
+    else:
+        user = User.query.get_or_404(id)
+        return render_template("edit.html", user=user)
 
 
 @app.route("/delete/<int:id>")
 def delete(id):
-    """Show info on a single user."""
+    """Delete single user."""
 
-    user = User.query.get_or_404(id)
-    return render_template("user.html", user=user)
+    delete = User.delete_user(id)
+    if delete:
+        return redirect(url_for("home"))
+    else:
+        return "error"

@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %} Edit User {% endblock %}
+
+{% block content %}
+
+<form action="{{ url_for('edit', id=user.id) }}" method="POST">
+    <p>Edit First name: <input size="50" placeholder="{{user.first_name}}" name="first_name" required></p>
+    <p>Edit Last name: <input size="50" placeholder="{{user.last_name}}" name="last_name" required></p>
+    <p>Edit Profile pic url: <input size="50" placeholder="{{user.image_url}}" name="image_url"></p>
+    <button>Save</button>
+</form>
+
+{% endblock %}
