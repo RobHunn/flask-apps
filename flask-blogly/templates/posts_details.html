@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block title %} Single post page {% endblock %}
+
+{% block content %}
+<div>
+    <h1>Title: {{post.title}}</h1>
+    <p>{{post.content}}</p>
+</div>
+
+<a class="btn" href="{{url_for('show_user',id=post.user_id) }}">Back</a>
+
+{% endblock %}

@@ -6,7 +6,7 @@ from models import db, User
 # Use test database and don't clutter tests with SQL
 app.config[
     "SQLALCHEMY_DATABASE_URI"
-] = "postgresql://postgres:p@ssw0rd@localhost:5432/blogly"
+] = "postgresql://postgres:$Treypostgresql74!@localhost:5432/blogly"
 app.config["SQLALCHEMY_ECHO"] = False
 db.drop_all()
 db.create_all()

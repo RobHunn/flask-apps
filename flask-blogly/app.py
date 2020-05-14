@@ -99,13 +99,17 @@ def delete(id):
 
 
 @app.route("/post_details/<int:id>")
-def post_details():
-    pass
+def post_details(id):
+
+    post = Post.query.get_or_404(id)
+    return render_template("posts_details.html", post=post)
 
 
 @app.route("/add_post/<user_id>")
 def add_post(user_id):
-    return render_template("add_post.html", user_id=user_id)
+    user = User.query.filter(User.id == user_id).all()
+    user_name = User.full_name(user_id)
+    return render_template("add_post.html", user_id=user_id, user_name=user_name)
 
 
 @app.route("/new_post", methods=["POST"])
