@@ -11,7 +11,7 @@ debug = DebugToolbarExtension(app)
 
 app.config[
     "SQLALCHEMY_DATABASE_URI"
-] = "postgresql://postgres:$Treypostgresql74!@localhost:5432/blogly"
+] = "postgresql://postgres:password@localhost:5432/blogly"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["SQLALCHEMY_ECHO"] = True
 
@@ -137,7 +137,7 @@ def edit_post(id):
 
     if request.method == "POST":
 
-        post = Post.query.get_or_404(id).update(
+        post = Post.query.filter(Post.id == id).update(
             {
                 Post.title: request.form["title"],
                 Post.content: request.form["content"],
@@ -151,7 +151,6 @@ def edit_post(id):
         # db.session.add(post)
         # db.session.commit()
 
-        flash(f"Post '{post.title}' edited.")
         return redirect(url_for("post_details", id=id))
 
     else:
