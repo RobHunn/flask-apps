@@ -1,7 +1,8 @@
 """Blogly application."""
 
-from flask import Flask, request, redirect, render_template, url_for
-from models import db, connect_db, User
+from flask import Flask, request, redirect, render_template, url_for, flash
+from models import db, connect_db, User, Post
+
 from flask_debugtoolbar import DebugToolbarExtension
 
 app = Flask(__name__)
@@ -15,12 +16,12 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["SQLALCHEMY_ECHO"] = True
 
 connect_db(app)
-# db.create_all()
+db.create_all()
 
 
 @app.route("/")
 def home():
-    users = User.query.all()
+    users = User.query.order_by(User.last_name, User.first_name).all()
     return render_template("home.html", users=users)
 
 
@@ -48,7 +49,8 @@ def show_user(id):
     """Show info on a single user."""
 
     user = User.query.get_or_404(id)
-    return render_template("user.html", user=user)
+    posts = Post.query.order_by(Post.created_at.desc()).limit(5).all()
+    return render_template("user.html", user=user, posts=posts)
 
 
 @app.route("/edit/<int:id>", methods=["GET", "POST"])
@@ -83,8 +85,38 @@ def edit(id):
 def delete(id):
     """Delete single user."""
 
-    delete = User.delete_user(id)
-    if delete:
-        return redirect(url_for("home"))
-    else:
-        return "error"
+    user = User.query.get_or_404(id)
+    db.session.delete(user)
+    db.session.commit()
+    return redirect(url_for("home"))
+
+
+##################################################################################
+#
+# -- Posts
+#
+##################################################################################
+
+
+@app.route("/post_details/<int:id>")
+def post_details():
+    pass
+
+
+@app.route("/add_post/<user_id>")
+def add_post(user_id):
+    return render_template("add_post.html", user_id=user_id)
+
+
+@app.route("/new_post", methods=["POST"])
+def new_post():
+    id = request.form["user_id"]
+    new_post = Post(
+        title=request.form["title"], content=request.form["content"], user_id=id
+    )
+
+    db.session.add(new_post)
+    db.session.commit()
+    flash(f"Post '{new_post.title}' added.")
+
+    return redirect(url_for("show_user", id=id))

@@ -1,5 +1,7 @@
 """Models for Blogly."""
 from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
+
 
 db = SQLAlchemy()
 
@@ -22,6 +24,7 @@ class User(db.Model):
     image_url = db.Column(
         db.String(200), nullable=False, default="../static/images/placeholder.jpg"
     )
+    posts = db.relationship("Post", backref="user", cascade="all, delete-orphan")
 
     def __repr__(self):
         """Show info about user"""
@@ -39,14 +42,34 @@ class User(db.Model):
         else:
             return None
 
-    @classmethod
-    def delete_user(cls, id):
-        """delte user by id"""
-        user = cls.query.get(id)
-        if user:
-            delete = cls.query.filter(User.id == id).delete()
-            db.session.commit()
-            return delete
-        else:
-            delete = None
-            return delete
+
+class Post(db.Model):
+    """ Post Table"""
+
+    __tablename__ = "posts"
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    title = db.Column(db.String(255), nullable=False)
+    content = db.Column(db.Text, nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+
+    def __repr__(self):
+        """Show info about post"""
+        u = self
+        content = (u.content[:75] + "...") if len(u.content) > 35 else u.content
+        return f"<User {u.id} {u.title} {content} {u.user_id}>"
+
+
+# post=Post(title='i am title',content='i am a post content, hope this is not too long orther wise i might not see it',user_id=1)
+
+# In [10]: db.session.add(post)
+
+# In [11]: db.session.commit()
+
+
+# In [6]: user = User(first_name='Robert',last_name='Bobby',image_url=None)
+
+# In [7]: db.session.add(user)
+
+# In [8]: db.session.commit()
