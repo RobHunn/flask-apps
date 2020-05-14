@@ -19,6 +19,12 @@ connect_db(app)
 db.create_all()
 
 
+@app.errorhandler(404)
+def page_not_found(e):
+
+    return render_template("404.html"), 404
+
+
 @app.route("/")
 def home():
     users = User.query.order_by(User.last_name, User.first_name).all()
@@ -124,3 +130,41 @@ def new_post():
     flash(f"Post '{new_post.title}' added.")
 
     return redirect(url_for("show_user", id=id))
+
+
+@app.route("/edit_post/<int:id>", methods=["GET", "POST"])
+def edit_post(id):
+
+    if request.method == "POST":
+
+        post = Post.query.get_or_404(id).update(
+            {
+                Post.title: request.form["title"],
+                Post.content: request.form["content"],
+                Post.user_id: request.form["user_id"],
+            }
+        )
+        db.session.commit()
+        # post.title = request.form["title"]
+        # post.content = request.form["content"]
+
+        # db.session.add(post)
+        # db.session.commit()
+
+        flash(f"Post '{post.title}' edited.")
+        return redirect(url_for("post_details", id=id))
+
+    else:
+        post = Post.query.get_or_404(id)
+        return render_template("posts_edit.html", post=post, user_id=post.user_id)
+
+
+@app.route("/delete_post/<int:id>")
+def delete_post(id):
+    post = Post.query.get_or_404(id)
+
+    db.session.delete(post)
+    db.session.commit()
+    flash(f"Post '{post.title} deleted.")
+
+    return redirect(url_for("show_user", id=post.user_id))

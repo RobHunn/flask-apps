@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %} Submit Post {% endblock %}
+
+{% block content %}
+<h1>Edit post number #{{post.id}}</h1>
+<form action="{{ url_for('new_post',id=post.id) }}" method="POST">
+    <p>Title: <input placeholder="post.title" name="title" required></p>
+    <p>Body: <input placeholder="post.content" name="content" required></p>
+    <input type="hidden" name="user_id" value="{{user_id}}">
+    <button>Save</button>
+</form>
+
+{% endblock %}
