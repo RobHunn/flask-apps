@@ -6,7 +6,7 @@ from models import db, User
 # Use test database and setup your own here....
 app.config[
     "SQLALCHEMY_DATABASE_URI"
-] = "postgresql://postgres:$Treypostgresql74!@localhost:5432/blogly"
+] = "postgresql://postgres:pa$$w@rd@localhost:5432/blogly"
 app.config["SQLALCHEMY_ECHO"] = False
 
 # Make Flask errors be real errors, rather than HTML pages with error info
