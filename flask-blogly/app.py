@@ -11,7 +11,7 @@ debug = DebugToolbarExtension(app)
 
 app.config[
     "SQLALCHEMY_DATABASE_URI"
-] = "postgresql://postgres:password@localhost:5432/blogly"
+] = f"postgresql://postgres:xxxxx@localhost:5432/blogly"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["SQLALCHEMY_ECHO"] = True
 
@@ -55,7 +55,7 @@ def show_user(id):
     """Show info on a single user."""
 
     user = User.query.get_or_404(id)
-    posts = Post.query.order_by(Post.created_at.desc()).limit(5).all()
+    posts = Post.query.filter(Post.user_id == id).order_by(Post.created_at.desc()).all()
     return render_template("user.html", user=user, posts=posts)
 
 
