@@ -11,9 +11,21 @@ db.create_all()
 User.query.delete()
 
 # Add users
-whiskey = User(first_name="Whiskey", last_name="drining", image_url=None)
-bowser = User(first_name="Bowser", last_name="waters", image_url=None)
-spike = User(first_name="Spike", last_name="porcupine", image_url=None)
+whiskey = User(
+    first_name="Whiskey",
+    last_name="drinking",
+    image_url="https://www.thewhiskyexchange.com/media/rtwe/uploads/banners/1389_Large.jpg?v=439547488542",
+)
+bowser = User(
+    first_name="Bowser",
+    last_name="waters",
+    image_url="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTDU6uA1HXoA1XXpAwt0zA8tEpM29oDiRGGjC2upkXfCmkW1ruo&usqp=CAU",
+)
+spike = User(
+    first_name="Spike",
+    last_name="Boss",
+    image_url="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcR36MsOO7H1kKWWAlLTzwfeqhGF4hxwoNFsjOaPJPf2U1AqoVQG&usqp=CAU",
+)
 
 # Add new objects to session, so they'll persist
 db.session.add(whiskey)

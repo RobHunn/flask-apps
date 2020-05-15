@@ -1,7 +1,7 @@
 """Blogly application."""
 
 from flask import Flask, request, redirect, render_template, url_for, flash
-from models import db, connect_db, User, Post
+from models import db, connect_db, User, Post, Tag, PostTag
 
 from flask_debugtoolbar import DebugToolbarExtension
 
@@ -11,12 +11,11 @@ debug = DebugToolbarExtension(app)
 
 app.config[
     "SQLALCHEMY_DATABASE_URI"
-] = f"postgresql://postgres:xxxxx@localhost:5432/blogly"
+] = f"postgresql://postgres:$Treypostgresql74!@localhost:5432/blogly"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["SQLALCHEMY_ECHO"] = True
 
 connect_db(app)
-db.create_all()
 
 
 @app.errorhandler(404)
@@ -167,3 +166,10 @@ def delete_post(id):
     flash(f"Post '{post.title} deleted.")
 
     return redirect(url_for("show_user", id=post.user_id))
+
+
+##################################################################################
+#
+# -- Tags -n- such
+#
+##################################################################################

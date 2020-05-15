@@ -2,7 +2,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 
-
 db = SQLAlchemy()
 
 
@@ -58,18 +57,35 @@ class Post(db.Model):
         """Show info about post"""
         u = self
         content = (u.content[:75] + "...") if len(u.content) > 35 else u.content
-        return f"<User {u.id} {u.title} {content} {u.user_id}>"
+        return f"<Post {u.id} {u.title} {content} {u.user_id}>"
 
 
-# post=Post(title='i am title',content='i am a post content, hope this is not too long orther wise i might not see it',user_id=1)
+class Tag(db.Model):
+    """Tag that can be added to posts."""
 
-# In [10]: db.session.add(post)
+    __tablename__ = "tags"
 
-# In [11]: db.session.commit()
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.Text, nullable=False, unique=True)
+
+    def __repr__(self):
+        """Show info about a tag"""
+        return f"<Tag name={self.name}>"
+
+    posts = db.relationship(
+        "Post", secondary="posts_tags", cascade="all,delete", backref="tags",
+    )
 
 
-# In [6]: user = User(first_name='Robert',last_name='Bobby',image_url=None)
+class PostTag(db.Model):
+    """ Post & tags relationship table """
 
-# In [7]: db.session.add(user)
+    __tablename__ = "posts_tags"
 
-# In [8]: db.session.commit()
+    post_id = db.Column(db.Integer, db.ForeignKey("posts.id"), primary_key=True)
+    tag_id = db.Column(db.Integer, db.ForeignKey("tags.id"), primary_key=True)
+
+    def __repr__(self):
+        """Show info about post"""
+        u = self
+        return f"<PostTag post_id={u.post_id} tag_id={u.tag_id}>"
