@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %} all post {% endblock %}
+
+{% block content %}
+<div class="user-container">
+    <div>
+        <h1>Posts matching tag: {{tag.name}}</h1>
+        <ul>
+            {% if posts %}
+            {% for post in posts %}
+            <li> <a href="{{url_for('post_details', id=post.id)}}">{{post.title}}</a></li>
+            {% endfor%}
+            {% endif %}
+        </ul>
+    </div>
+</div>
+
+{% endblock %}

@@ -11,7 +11,7 @@ debug = DebugToolbarExtension(app)
 
 app.config[
     "SQLALCHEMY_DATABASE_URI"
-] = f"postgresql://postgres:xxxxxx@localhost:5432/blogly"
+] = f"postgresql://postgres:XXXXXX@localhost:5432/blogly"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["SQLALCHEMY_ECHO"] = True
 
@@ -107,14 +107,23 @@ def delete(id):
 def post_details(id):
 
     post = Post.query.get_or_404(id)
-    return render_template("posts_details.html", post=post)
+    tags = (
+        db.session.query(Tag.name, Tag.id)
+        .join(PostTag)
+        .filter(PostTag.post_id == post.id)
+    )
+    print("HIT TAGS ---->", tags)
+    return render_template("posts_details.html", post=post, tags=tags)
 
 
 @app.route("/add_post/<user_id>")
 def add_post(user_id):
     user = User.query.filter(User.id == user_id).all()
     user_name = User.full_name(user_id)
-    return render_template("add_post.html", user_id=user_id, user_name=user_name)
+    tags = Tag.query.all()
+    return render_template(
+        "add_post.html", user_id=user_id, user_name=user_name, tags=tags
+    )
 
 
 @app.route("/new_post", methods=["POST"])
@@ -126,8 +135,16 @@ def new_post():
 
     db.session.add(new_post)
     db.session.commit()
-    flash(f"Post '{new_post.title}' added.")
 
+    db.session.refresh(new_post)
+    print("HIT------>", new_post.id)
+    values = request.form.getlist("checkbox")
+    for tagID in values:
+        insert_tags = PostTag(post_id=new_post.id, tag_id=tagID)
+        db.session.add(insert_tags)
+        db.session.commit()
+
+    flash(f"Post '{new_post.title}' added.")
     return redirect(url_for("show_user", id=id))
 
 
@@ -136,25 +153,21 @@ def edit_post(id):
 
     if request.method == "POST":
 
-        post = Post.query.filter(Post.id == id).update(
-            {
-                Post.title: request.form["title"],
-                Post.content: request.form["content"],
-                Post.user_id: request.form["user_id"],
-            }
-        )
+        post = Post.query.get_or_404(id)
+        post.title = request.form["title"]
+        post.content = request.form["content"]
+        tag_ids = [int(num) for num in request.form.getlist("checkbox")]
+        post.tags = Tag.query.filter(Tag.id.in_(tag_ids)).all()
         db.session.commit()
-        # post.title = request.form["title"]
-        # post.content = request.form["content"]
-
-        # db.session.add(post)
-        # db.session.commit()
 
         return redirect(url_for("post_details", id=id))
 
     else:
         post = Post.query.get_or_404(id)
-        return render_template("posts_edit.html", post=post, user_id=post.user_id)
+        tags = Tag.query.all()
+        return render_template(
+            "posts_edit.html", post=post, user_id=post.user_id, tags=tags
+        )
 
 
 @app.route("/delete_post/<int:id>")
@@ -173,3 +186,11 @@ def delete_post(id):
 # -- Tags -n- such
 #
 ##################################################################################
+
+
+@app.route("/match_all_tags/<int:tag_id>", methods=["GET"])
+def match_all_tags(tag_id):
+    posts = db.session.query(PostTag.post_id).join(Tag).filter(Tag.id == tag_id).all()
+    posts = Post.query.filter(Post.id.in_(posts)).all()
+    tag = Tag.query.get_or_404(tag_id)
+    return render_template("post_list.html", posts=posts, tag=tag)
