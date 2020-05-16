@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %} Home page {% endblock title %}
+{% block content %}
+
+
+{% if pets %}
+{% for pet in pets %}
+<div>
+    <img style="max-width: 200px; max-height: 300px;" src="{{pet.image_url}}" alt="image of animale">
+    <h3>Pet name: {{pet.name}}</h3>
+    <p>Age: {{pet.age}}</p>
+    <p>Available:
+        {% if pet.available %}
+        <b>{{pet.available}}</b>
+        {% else %}
+        Not available
+        {% endif %}
+    </p>
+</div>
+<hr>
+{% endfor %}
+{% else %}
+No Pets Available at this time...
+{% endif %}
+
+{% endblock content %}
