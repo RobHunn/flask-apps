@@ -2,15 +2,11 @@
 {% block title %} Home page {% endblock title %}
 {% block content %}
 
-<form action="">
-    {% for field in form
-        if field.widget.input_type != 'hidden' %}
-    <p>
-        {{field.lable}}
-        {{field}}
+<h1>Add a Pet</h1>
 
-    </p>
-    {% endfor%}
+<form method="POST" action="{{url_for('add_pet')}}">
+    {% include "_form.html" %}
+    <button type="submit">ADD PET</button>
 </form>
 
 {% endblock content %}

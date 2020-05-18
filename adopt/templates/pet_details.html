@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block title %} pet details {% endblock title %}
+{% block content %}
+
+<h1>Pet details</h1>
+
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<ul class=flashes>
+    {% for message in messages %}
+    <li style="list-style: none; color:green;font-size:15px">{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+{% endwith %}
+
+<div>
+    {% if pet %}
+    <div>
+        <img style="max-width: 200px; max-height: 300px;" src="{{pet.image_url}}" alt="image of animale">
+        <h3>Pet name:
+            <a href="{{ url_for('edit_pet', pet_id=pet.id) }}">{{ pet.name }}</a>
+        </h3>
+        <p>Species: {{pet.species}}</p>
+        <p>Age: {{pet.age}}</p>
+        <p>Available:
+            {% if pet.available %}
+            <b>{{pet.available}}</b>
+            {% else %}
+            Not available
+            {% endif %}
+        </p>
+    </div>
+    {% else %}
+    <div>No pets yet.</div>
+    {% endif %}
+</div>
+<a href="{{ url_for('home') }}">GO BACK</a>
+{% endblock %}

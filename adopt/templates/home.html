@@ -2,12 +2,20 @@
 {% block title %} Home page {% endblock title %}
 {% block content %}
 
+{% for msg in get_flashed_messages() %}
+<p>
+    {{msg}}
+</p>
+{% endfor %}
 
 {% if pets %}
 {% for pet in pets %}
 <div>
     <img style="max-width: 200px; max-height: 300px;" src="{{pet.image_url}}" alt="image of animale">
-    <h3>Pet name: {{pet.name}}</h3>
+    <h3>Pet name:
+        <a href="{{ url_for('pet_details', pet_id=pet.id) }}">{{ pet.name }}</a>
+    </h3>
+    <p>Species: {{pet.species}}</p>
     <p>Age: {{pet.age}}</p>
     <p>Available:
         {% if pet.available %}
@@ -22,5 +30,5 @@
 {% else %}
 No Pets Available at this time...
 {% endif %}
-
+<a href="{{url_for('add_pet')}}">add_pet</a>
 {% endblock content %}

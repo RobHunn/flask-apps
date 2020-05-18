@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block title %} edit pet {% endblock title %}
+{% block content %}
+
+{% if pet.name %}
+<h1>{{ pet.name }}</h1>
+{% endif %}
+
+{% if pet.image_url %}
+<img style="max-width: 200px; max-height: 300px;" src="{{pet.image_url}}" alt="image of animale">
+{% endif %}
+
+<h2>Update Pet</h2>
+
+<form method="POST" action="{{url_for('edit_pet', pet_id=pet.id)}}">
+    {% include "_form.html" %}
+    <button type="submit">Update</button>
+</form>
+
+{% endblock content %}
