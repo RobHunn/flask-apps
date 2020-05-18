@@ -79,10 +79,10 @@ def add_pet():
 
 @app.route("/edit_pet/<int:pet_id>", methods=["GET", "POST"])
 def edit_pet(pet_id):
-    form = AddPetForm()
+    pet = Pet.query.get_or_404(pet_id)
+    form = AddPetForm(obj=pet)
     spec = db.session.query(Specie.id, Specie.species)
     form.species.choices = spec
-    pet = Pet.query.get_or_404(pet_id)
     if form.validate_on_submit():
         pet.name = form.name.data
         pet.age = form.age.data
