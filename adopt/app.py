@@ -12,7 +12,7 @@ debug = DebugToolbarExtension(app)
 
 app.config[
     "SQLALCHEMY_DATABASE_URI"
-] = f"postgresql://postgres:$Treypostgresql74!@localhost:5432/adopt"
+] = f"postgresql://postgres:xxxxxx@localhost:5432/adopt"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["SQLALCHEMY_ECHO"] = True
 
