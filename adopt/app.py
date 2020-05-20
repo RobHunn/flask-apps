@@ -3,6 +3,7 @@
 from flask import Flask, request, redirect, render_template, url_for, flash
 from models import db, connect_db, Pet, Specie, PetSpeciesTag
 from forms import AddPetForm
+from shhh import hippo
 
 from flask_debugtoolbar import DebugToolbarExtension
 
@@ -12,7 +13,7 @@ debug = DebugToolbarExtension(app)
 
 app.config[
     "SQLALCHEMY_DATABASE_URI"
-] = f"postgresql://postgres:xxxxxx@localhost:5432/adopt"
+] = f"postgresql://postgres:{hippo}@localhost:5432/adopt"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["SQLALCHEMY_ECHO"] = True
 
