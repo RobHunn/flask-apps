@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %} Home Page {% endblock %}
+
+{% block content %}
+<div>
+    <ul id="target"></ul>
+</div>
+
+<div>
+    <form style="display: flex; flex-direction:column; margin-left:25px;margin-right:25px" id="form-target">
+        <label for="flavor">Flavor</label>
+        <input type="text" name="flavor" id="flavor">
+        <label for="size">size</label>
+        <input type="text" name="size" id="size">
+        <label for="rating">rating</label>
+        <input type="text" name="rating" id="rating">
+        <label for="image">image-url</label>
+        <input type="text" name="image" id="image">
+        <button>SUBMIT</button>
+    </form>
+</div>
+{% endblock %}
